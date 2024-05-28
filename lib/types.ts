@@ -4,6 +4,12 @@ export type Message = CoreMessage & {
   id: string
 }
 
+export type Marker = {
+  lat: number
+  lng: number
+  name?: string
+}
+
 export interface Chat extends Record<string, any> {
   id: string
   title: string

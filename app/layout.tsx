@@ -7,6 +7,9 @@ import { TailwindIndicator } from '@/components/tailwind-indicator'
 import { Providers } from '@/components/providers'
 import { Header } from '@/components/header'
 import { Toaster } from '@/components/ui/sonner'
+import { ClientApiProvider } from './ClientApiProvider'
+import FoobarMarker from '@/components/FoobarMarker'
+import { MapContextProvider } from '@/components/MapContext'
 
 export const metadata = {
   metadataBase: process.env.VERCEL_URL
@@ -52,11 +55,21 @@ export default function RootLayout({ children }: RootLayoutProps) {
           enableSystem
           disableTransitionOnChange
         >
-          <div className="flex flex-col min-h-screen">
-            <Header />
-            <main className="flex flex-col flex-1 bg-muted/50">{children}</main>
-          </div>
-          <TailwindIndicator />
+          <ClientApiProvider
+            apiKey={process.env.GOOGLE_MAPS_API_KEY as string}
+            libraries={['marker']}
+          >
+            <MapContextProvider>
+              <div className="flex flex-col min-h-screen">
+                <Header />
+                <main className="grid grid-cols-12 gap-0 flex-1 bg-muted/50">
+                  <aside className="w-full col-span-8">{children}</aside>
+                  <aside className="hidden min-w-32 col-span-4 bg-gray-100 px-8 py-6"></aside>
+                </main>
+              </div>
+              <TailwindIndicator />
+            </MapContextProvider>
+          </ClientApiProvider>
         </Providers>
       </body>
     </html>

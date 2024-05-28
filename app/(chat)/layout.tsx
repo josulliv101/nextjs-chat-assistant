@@ -1,4 +1,5 @@
 import { SidebarDesktop } from '@/components/sidebar-desktop'
+import FoobarMap from '@/components/foobar-map'
 
 interface ChatLayoutProps {
   children: React.ReactNode
@@ -6,9 +7,10 @@ interface ChatLayoutProps {
 
 export default async function ChatLayout({ children }: ChatLayoutProps) {
   return (
-    <div className="relative flex h-[calc(100vh_-_theme(spacing.16))] overflow-hidden">
+    <div className="relative flex">
       <SidebarDesktop />
-      {children}
+
+      <FoobarMap>{children}</FoobarMap>
     </div>
   )
 }

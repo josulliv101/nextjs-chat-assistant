@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { IconOpenAI, IconUser } from '@/components/ui/icons'
 import { cn } from '@/lib/utils'
 import { spinner } from './spinner'
@@ -97,11 +98,17 @@ export function BotCard({
     <div className="group relative flex items-start md:-ml-12">
       <div
         className={cn(
-          'flex size-[24px] shrink-0 select-none items-center justify-center rounded-md border bg-primary text-primary-foreground shadow-sm',
+          'flex size-[48px] shrink-0 select-none items-center justify-center rounded-full border-spacing-6 border-blue-500 bg-primary text-primary-foreground shadow-sm',
           !showAvatar && 'invisible'
         )}
       >
-        <IconOpenAI />
+        <Image
+          alt="Natalia"
+          src="/natalia-assistant.png"
+          width="48"
+          height="48"
+          className="rounded-full object-cover"
+        />
       </div>
       <div className="ml-4 flex-1 pl-2">{children}</div>
     </div>

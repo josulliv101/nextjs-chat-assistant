@@ -58,11 +58,16 @@ export function Chat({ id, className, session, missingKeys }: ChatProps) {
 
   return (
     <div
-      className="group w-full overflow-auto pl-0 peer-[[data-state=open]]:lg:pl-[250px] peer-[[data-state=open]]:xl:pl-[300px]"
+      className="absolute top-0 group w-full overflow-auto pl-0 peer-[[data-state=open]]:lg:pl-[250px] peer-[[data-state=open]]:xl:pl-[300px]"
       ref={scrollRef}
     >
       <div
-        className={cn('pb-[200px] pt-4 md:pt-10', className)}
+        className={cn(
+          'pb-[200px] pt-4 md:pt-10',
+          'fixed right-0 bottom-12 max-w-[33dvw] h-[88dvh] mt-24 pt-24',
+          'bg-blue-50 overflow-y-auto',
+          className
+        )}
         ref={messagesRef}
       >
         {messages.length ? (

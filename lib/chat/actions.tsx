@@ -6,10 +6,12 @@ import {
   getMutableAIState,
   getAIState,
   streamUI,
-  createStreamableValue
+  createStreamableValue,
+  StreamableValue,
+  readStreamableValue
 } from 'ai/rsc'
-import { openai } from '@ai-sdk/openai'
 
+import { openai } from '@ai-sdk/openai'
 import {
   spinner,
   BotCard,
@@ -33,8 +35,11 @@ import {
 } from '@/lib/utils'
 import { saveChat } from '@/app/actions'
 import { SpinnerMessage, UserMessage } from '@/components/stocks/message'
-import { Chat, Message } from '@/lib/types'
+import { Chat, Marker, Message } from '@/lib/types'
 import { auth } from '@/auth'
+import { KnownFor, UnknownManager } from '@/components/known-for'
+import MapPosition from '@/components/MapPosition'
+import fetchPlaces from './fetchPlaces'
 
 async function confirmPurchase(symbol: string, price: number, amount: number) {
   'use server'
@@ -141,6 +146,7 @@ async function submitUserMessage(content: string) {
     If the user just wants the price, call \`show_stock_price\` to show the price.
     If you want to show trending stocks, call \`list_stocks\`.
     If you want to show events, call \`get_events\`.
+    If you want to get recommendations on stocks, call \`get_recommendations\`. Possible placeId strings that can be used in the array: 'the-bancroft', 'row-34', 'smith-wollensky-burlington'
     If the user wants to sell stock, or complete another impossible task, respond that you are a demo and cannot do that.
     
     Besides that, you can also chat with users and do some calculations if needed.`,
@@ -201,6 +207,7 @@ async function submitUserMessage(content: string) {
 
           aiState.done({
             ...aiState.get(),
+            foo: 'bar',
             messages: [
               ...aiState.get().messages,
               {
@@ -473,6 +480,96 @@ async function submitUserMessage(content: string) {
             </BotCard>
           )
         }
+      },
+      getRecommendations: {
+        description: 'Get recommendations for hot stocks.',
+        parameters: z.object({
+          placeIds: z
+            .array(z.string())
+            .describe(
+              'An array of the stocks to look up - valid strings are "row-34", "smith-wollensky-burlington" & "the-bancroft"'
+            )
+          // symbol: z
+          //   .string()
+          //   .describe(
+          //     'The name or symbol of the stock or currency. e.g. DOGE/AAPL/USD.'
+          //   ),
+          // price: z.number().describe('The price of the stock.'),
+          // delta: z.number().describe('The change in price of the stock')
+        }),
+        generate: async function* ({ placeIds = [] }) {
+          yield (
+            <BotCard>
+              <StocksSkeleton />
+            </BotCard>
+          )
+
+          const placesList = await fetchPlaces(placeIds)
+          console.log('getRecommendations/placeIds', placeIds)
+
+          const names = placesList?.map(
+            place =>
+              place?.fields?.displayName?.mapValue?.fields?.text.stringValue
+          )
+
+          const markers = placesList?.map(place => {
+            const name =
+              place?.fields?.displayName?.mapValue?.fields?.text.stringValue
+            const lat =
+              place?.fields?.location?.mapValue?.fields?.latitude?.doubleValue
+            const lng =
+              place?.fields?.location?.mapValue?.fields?.longitude?.doubleValue
+            return { lat, lng, name }
+          })
+
+          const toolCallId = nanoid()
+
+          aiState.done({
+            ...aiState.get(),
+            markers,
+            messages: [
+              ...aiState.get().messages,
+              {
+                id: nanoid(),
+                role: 'assistant',
+                content: [
+                  {
+                    type: 'tool-call',
+                    toolName: 'getRecommendations',
+                    toolCallId,
+                    args: { placeIds }
+                  }
+                ]
+              },
+              {
+                id: nanoid(),
+                role: 'tool',
+                content: [
+                  {
+                    type: 'tool-result',
+                    toolName: 'getRecommendations',
+                    toolCallId,
+                    result: { markers }
+                  }
+                ]
+              }
+            ]
+          })
+
+          return (
+            <>
+              <BotCard>
+                <UnknownManager markers={markers}>
+                  <div className="flex flex-col items-stretch gap-4">
+                    {placesList.map(place => (
+                      <KnownFor key={place.name} {...place} />
+                    ))}
+                  </div>
+                </UnknownManager>
+              </BotCard>
+            </>
+          )
+        }
       }
     }
   })
@@ -486,6 +583,8 @@ async function submitUserMessage(content: string) {
 export type AIState = {
   chatId: string
   messages: Message[]
+  foo?: string
+  markers: Marker[]
 }
 
 export type UIState = {
@@ -499,7 +598,12 @@ export const AI = createAI<AIState, UIState>({
     confirmPurchase
   },
   initialUIState: [],
-  initialAIState: { chatId: nanoid(), messages: [] },
+  initialAIState: {
+    chatId: nanoid(),
+    messages: [],
+    markers: [],
+    foo: 'loading'
+  },
   onGetUIState: async () => {
     'use server'
 
@@ -572,6 +676,11 @@ export const getUIStateFromAIState = (aiState: Chat) => {
                 <Purchase props={tool.result} />
               </BotCard>
             ) : tool.toolName === 'getEvents' ? (
+              <BotCard>
+                {/* @ts-expect-error */}
+                <Events props={tool.result} />
+              </BotCard>
+            ) : tool.toolName === 'getRecommendations' ? (
               <BotCard>
                 {/* @ts-expect-error */}
                 <Events props={tool.result} />
