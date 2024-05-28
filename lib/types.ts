@@ -7,6 +7,7 @@ export type Message = CoreMessage & {
 export type Marker = {
   lat: number
   lng: number
+  id?: string
   name?: string
 }
 

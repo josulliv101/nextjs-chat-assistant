@@ -512,14 +512,15 @@ async function submitUserMessage(content: string) {
               place?.fields?.displayName?.mapValue?.fields?.text.stringValue
           )
 
-          const markers = placesList?.map(place => {
+          const markers = placesList?.map((place, index) => {
+            const id = placeIds[index]
             const name =
               place?.fields?.displayName?.mapValue?.fields?.text.stringValue
             const lat =
               place?.fields?.location?.mapValue?.fields?.latitude?.doubleValue
             const lng =
               place?.fields?.location?.mapValue?.fields?.longitude?.doubleValue
-            return { lat, lng, name }
+            return { id, lat, lng, name }
           })
 
           const toolCallId = nanoid()

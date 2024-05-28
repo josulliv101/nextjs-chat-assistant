@@ -5,20 +5,25 @@ import FoobarMarker from '@/components/FoobarMarker'
 import { useMapContext } from '@/components/MapContext'
 import MapPosition from '@/components/MapPosition'
 import { Map, Marker } from '@vis.gl/react-google-maps'
+import { useRouter } from 'next/navigation'
 
 export default function MapBM() {
   const [aiState] = useAIState()
   const [uiState] = useUIState()
+  const router = useRouter()
   const { markers = [] } = aiState
   const [initialMarkers, setInitialMarkers] = useMapContext()
   console.log('aiState', aiState)
   console.log('uiState', uiState)
   console.log('initialMarkers', initialMarkers)
   return (
-    <>
+    <div className="grid grid-cols-12">
+      <div className="w-[30vw] col-span-4 text-white bg-gray-800 px-8 py-6">
+        aside
+      </div>
       <MapPosition distance={10}>
         <Map
-          className="h-[320px] w-full"
+          className="h-[320px] w-full col-span-8"
           defaultZoom={3}
           defaultBounds={undefined}
           defaultCenter={{ lat: 22.54992, lng: 0 }}
@@ -31,12 +36,13 @@ export default function MapBM() {
         >
           {markers.map((marker: any) => {
             console.log('...', marker, marker.lat, marker.lng)
+            const handleClick = () => router.push(`/map/${marker.id}`)
             return (
               <FoobarMarker
                 key={JSON.stringify(marker)}
                 position={marker}
                 // clickable={true}
-                // onClick={() => console.log('marker was clicked!')}
+                onClick={handleClick}
                 title={marker?.name || 'unknown'}
               >
                 <div className="rounded-full bg-blue-500 border-4 border-white size-8 animate-in"></div>
@@ -45,10 +51,6 @@ export default function MapBM() {
           })}
         </Map>
       </MapPosition>
-      <div className="p-12">
-        <h2>Other Stuff</h2>
-        <p>{JSON.stringify(aiState)}</p>
-      </div>
-    </>
+    </div>
   )
 }

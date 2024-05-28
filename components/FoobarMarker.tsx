@@ -26,6 +26,7 @@ export default function FoobarMarker({
   parentPhotoUrl,
   size = 24,
   title,
+  onClick,
   ...props
 }: any) {
   const map = useMap()
@@ -66,7 +67,7 @@ export default function FoobarMarker({
       clickable={true}
       {...props}
       title={title}
-      onClick={(ev, ...args) => console.log('click', ev, args, marker)}
+      onClick={onClick}
     >
       <div className="relative">{children}</div>
     </AdvancedMarker>
