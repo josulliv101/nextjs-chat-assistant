@@ -25,6 +25,7 @@ export default function FoobarMap({ children }: any) {
       {[initialMarkers].map((marker: any) => {
         return (
           <FoobarMarker
+            key={JSON.stringify(marker)}
             position={{ lat: 41.09, lng: -71.875 }}
             // clickable={true}
             // onClick={() => console.log('marker was clicked!')}

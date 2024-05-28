@@ -63,7 +63,7 @@ export function Chat({ id, className, session, missingKeys }: ChatProps) {
     >
       <div
         className={cn(
-          'pb-[200px] pt-4 md:pt-10',
+          'pb-[200px] md:pt-10',
           'fixed right-0 bottom-12 max-w-[33dvw] h-[88dvh] mt-24 pt-24',
           'bg-blue-50 overflow-y-auto',
           className
