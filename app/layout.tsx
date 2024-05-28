@@ -44,9 +44,17 @@ export const viewport = {
 
 interface RootLayoutProps {
   children: React.ReactNode
+  uiMap: React.ReactNode
+  mapChildren: React.ReactNode
+  params: any
 }
 
-export default async function RootLayout({ children }: RootLayoutProps) {
+export default async function RootLayout({
+  children,
+  mapChildren,
+  uiMap,
+  params
+}: RootLayoutProps) {
   const id = nanoid()
   const session = (await auth()) as Session
   const missingKeys = await getMissingKeys()
@@ -73,6 +81,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
             <MapContextProvider>
               <div className="flex flex-col min-h-screen">
                 <Header />
+
                 <main className="grid grid-cols-12 gap-0 flex-1 bg-muted/50">
                   <aside className="w-full col-span-8 ">
                     <AI
@@ -83,7 +92,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
                         foo: ''
                       }}
                     >
-                      <MapBM />
+                      <MapBM mapChildren={mapChildren}>{uiMap}</MapBM>
                       <Chat
                         id={id}
                         session={session}

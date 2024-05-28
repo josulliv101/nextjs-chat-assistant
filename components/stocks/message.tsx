@@ -104,7 +104,7 @@ export function BotCard({
       >
         <Image
           alt="Natalia"
-          src="/natalia-assistant.png"
+          src="/natalia-square.png"
           width="48"
           height="48"
           className="rounded-full object-cover"

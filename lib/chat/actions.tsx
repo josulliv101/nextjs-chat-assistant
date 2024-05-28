@@ -560,13 +560,11 @@ async function submitUserMessage(content: string) {
           return (
             <>
               <BotCard>
-                <UnknownManager markers={markers}>
-                  <div className="flex flex-col items-stretch gap-4">
-                    {placesList.map(place => (
-                      <KnownFor key={place.name} {...place} />
-                    ))}
-                  </div>
-                </UnknownManager>
+                <div className="flex flex-col items-stretch gap-4">
+                  {placesList.map(place => (
+                    <KnownFor key={place.name} {...place} />
+                  ))}
+                </div>
               </BotCard>
             </>
           )

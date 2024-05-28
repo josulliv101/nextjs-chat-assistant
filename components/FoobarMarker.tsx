@@ -1,5 +1,10 @@
 'use client'
-
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipPortal,
+  TooltipTrigger
+} from '@/components/ui/tooltip2'
 import Image from 'next/image'
 import {
   Marker,
@@ -15,6 +20,10 @@ import { CheckIcon } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 import { cn } from '@/lib/utils'
+import { routeros } from 'react-syntax-highlighter/dist/cjs/styles/hljs'
+import { useRouter } from 'next/navigation'
+import { useAIState } from 'ai/rsc'
+import { useEffect } from 'react'
 
 const thumbnailSize = 140
 
@@ -24,22 +33,35 @@ export default function FoobarMarker({
   excellence,
   photoUrl,
   parentPhotoUrl,
+  position,
   size = 24,
-  title,
-  onClick,
+  title = 'foo',
+  // onClick,
   ...props
 }: any) {
   const map = useMap()
   const coreLib = useMapsLibrary('core')
+  const router = useRouter()
+  const [aiState, setAiState] = useAIState()
 
   const [markerRef, marker] = useAdvancedMarkerRef()
 
   const isWithinBounds =
     !!marker?.position && map?.getBounds()?.contains(marker?.position)
 
-  const handleMouseOver = () => {
-    console.log('hover')
+  const onClick = () => {
+    console.log('onClick', id)
+    router.push(`/map/${id}`)
   }
+
+  // useEffect(() => {
+  //   if (position && markers) {
+  //     setAiState({
+  //       ...aiState,
+  //       markers: [position]
+  //     })
+  //   }
+  // }, [])
 
   // useEffect(() => {
   //   if (!coreLib || !map || !marker) return;
@@ -62,14 +84,22 @@ export default function FoobarMarker({
 
   return (
     <AdvancedMarker
-      className="foobar-marker animate-fade"
+      className="foobar-marker animate-fade rounded-full"
       ref={markerRef}
       clickable={true}
-      {...props}
-      title={title}
+      // title={title}
       onClick={onClick}
+      position={position}
+      zIndex={999}
     >
-      <div className="relative">{children}</div>
+      <Tooltip delayDuration={100}>
+        <TooltipTrigger>
+          <div>{children}</div>
+        </TooltipTrigger>
+        <TooltipPortal>
+          <TooltipContent>{title}</TooltipContent>
+        </TooltipPortal>
+      </Tooltip>
     </AdvancedMarker>
   )
 }

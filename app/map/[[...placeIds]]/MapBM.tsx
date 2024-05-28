@@ -1,13 +1,25 @@
 'use client'
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger
+} from '@/components/ui/tooltip'
 import { useUIState, useAIState } from 'ai/rsc'
 import FoobarMarker from '@/components/FoobarMarker'
 import { useMapContext } from '@/components/MapContext'
 import MapPosition from '@/components/MapPosition'
 import { Map, Marker } from '@vis.gl/react-google-maps'
 import { useRouter } from 'next/navigation'
+import React, { PropsWithChildren } from 'react'
+import { TooltipPortal } from '@radix-ui/react-tooltip'
 
-export default function MapBM() {
+export default function MapBM({
+  children,
+  mapChildren
+}: PropsWithChildren<{
+  mapChildren: React.ReactNode
+}>) {
   const [aiState] = useAIState()
   const [uiState] = useUIState()
   const router = useRouter()
@@ -19,7 +31,7 @@ export default function MapBM() {
   return (
     <div className="grid grid-cols-12">
       <div className="w-[30vw] col-span-4 text-white bg-gray-800 px-8 py-6">
-        aside
+        {children}
       </div>
       <MapPosition distance={10}>
         <Map
@@ -34,18 +46,21 @@ export default function MapBM() {
           mapTypeId={'roadmap'}
           mapId={'739af084373f96fe'}
         >
+          {mapChildren}
           {markers.map((marker: any) => {
             console.log('...', marker, marker.lat, marker.lng)
             const handleClick = () => router.push(`/map/${marker.id}`)
+
             return (
               <FoobarMarker
+                id={marker?.id}
                 key={JSON.stringify(marker)}
                 position={marker}
-                // clickable={true}
-                onClick={handleClick}
+                clickable={true}
+                // onClick={handleClick}
                 title={marker?.name || 'unknown'}
               >
-                <div className="rounded-full bg-blue-500 border-4 border-white size-8 animate-in"></div>
+                <div className="rounded-full z-[9999] bg-blue-500 border-4 border-white size-8 animate-in"></div>
               </FoobarMarker>
             )
           })}
