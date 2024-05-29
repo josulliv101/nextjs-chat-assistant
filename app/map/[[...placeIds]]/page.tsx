@@ -28,9 +28,12 @@ export default async function Page({ params: { placeIds } }: any) {
             ?.mapValue?.fields?.text.stringValue
 
         return (
-          <div key={name} className="mt-8 px-12 flex gap-8 items-start">
+          <div
+            key={name}
+            className="mt-8 px-12 rounded-md flex gap-8 items-start"
+          >
             <Image
-              className="aspect-square min-w-48"
+              className="aspect-square min-w-48 rounded-md"
               alt={name}
               width="200"
               height="200"

@@ -13,6 +13,8 @@ import type { NextFetchEvent, NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
 export function middleware(req: NextRequest, ev: NextFetchEvent) {
+  const { nextUrl: url, geo } = req
+  console.log('geo', JSON.stringify(geo))
   const response = NextResponse.next()
   const { pathname } = req.nextUrl
   console.log('req', pathname)

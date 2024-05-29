@@ -26,6 +26,8 @@ export default function MapPosition({
   const markers = rawMarkers.filter(
     (m: any) => m.id && m.lat && m.lng && m.name
   )
+
+  console.log('MAP rawMarkers', rawMarkers)
   // const [initialMarkers, setInitialMarkers] = useMapContext()
   const coreLib = useMapsLibrary('core')
 
@@ -36,7 +38,9 @@ export default function MapPosition({
   // const [initialMarkers, setInitialMarkers] = useState(mapState)
 
   useEffect(() => {
-    if (!coreLib || !map || !markers || markers.length == 0) return
+    if (!coreLib || !map || !markers || markers.length == 0) {
+      return
+    }
 
     const { LatLng, LatLngBounds } = coreLib
     const bounds = new coreLib.LatLngBounds()
