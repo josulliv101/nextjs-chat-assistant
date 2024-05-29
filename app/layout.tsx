@@ -72,9 +72,21 @@ export default async function RootLayout({
     place?.fields?.generativeSummary?.mapValue?.fields?.description?.mapValue
       ?.fields?.text.stringValue
 
-  const marker: any =
+  let marker: any =
     placeId && lat && lng && name ? { lat, lng, name, id: placeId } : null
-
+  if (!marker) {
+    try {
+      let geo = JSON.parse(cookieStore.get('geo')?.value || '{}')
+      if (geo.latitude && geo.longitude) {
+        marker = {
+          id: 'user-geo',
+          lat: Number(geo.latitude),
+          lng: Number(geo.longitude),
+          name: 'User geo'
+        }
+      }
+    } catch (err) {}
+  }
   return (
     <html lang="en" suppressHydrationWarning>
       <body

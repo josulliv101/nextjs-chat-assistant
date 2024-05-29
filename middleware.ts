@@ -24,6 +24,12 @@ export function middleware(req: NextRequest, ev: NextFetchEvent) {
     path: '/'
   })
 
+  response.cookies.set({
+    name: 'geo',
+    value: JSON.stringify(geo),
+    path: '/'
+  })
+
   return response
   // const nonce = Buffer.from(crypto.randomUUID()).toString('base64')
 
