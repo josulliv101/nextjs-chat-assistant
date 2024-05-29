@@ -563,9 +563,8 @@ async function submitUserMessage(content: string) {
               <BotCard>
                 <div className="flex justify-between gap-4">
                   {markers.map(marker => (
-                    <div className="col-span-1">
+                    <div key={marker.id} className="col-span-1">
                       <Image
-                        key={marker.id}
                         width="200"
                         height="200"
                         className="w-1/3 h-auto object-cover"
