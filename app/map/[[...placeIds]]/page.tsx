@@ -28,7 +28,7 @@ export default async function Page({ params: { placeIds } }: any) {
             ?.mapValue?.fields?.text.stringValue
 
         return (
-          <div className="mt-8 px-12 flex gap-8 items-start">
+          <div key={name} className="mt-8 px-12 flex gap-8 items-start">
             <Image
               className="aspect-square min-w-48"
               alt={name}
