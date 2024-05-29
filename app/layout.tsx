@@ -17,6 +17,9 @@ import { Toaster } from '@/components/ui/sonner'
 import { ClientApiProvider } from './ClientApiProvider'
 import FoobarMarker from '@/components/FoobarMarker'
 import { MapContextProvider } from '@/components/MapContext'
+
+import fetchPlaces from '@/lib/chat/fetchPlaces'
+import { cookies } from 'next/headers'
 import MapBM from './map/[[...placeIds]]/MapBM'
 
 export const metadata = {
@@ -52,12 +55,29 @@ interface RootLayoutProps {
 export default async function RootLayout({
   children,
   mapChildren,
-  uiMap,
+
   params
 }: RootLayoutProps) {
   const id = nanoid()
   const session = (await auth()) as Session
   const missingKeys = await getMissingKeys()
+  console.log('session', session)
+  const cookieStore = cookies()
+  const pathname = cookieStore.get('pathname')
+
+  const placeId = pathname?.value.split('/').slice(-1)[0]
+
+  const places = await fetchPlaces([placeId || ''])
+  const place = places[0]
+  const name = place?.fields?.displayName?.mapValue?.fields?.text.stringValue
+  const lat = place?.fields?.location?.mapValue?.fields?.latitude?.doubleValue
+  const lng = place?.fields?.location?.mapValue?.fields?.longitude?.doubleValue
+  const description =
+    place?.fields?.generativeSummary?.mapValue?.fields?.description?.mapValue
+      ?.fields?.text.stringValue
+
+  const marker: any = placeId ? { lat, lng, name, id: placeId } : null
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -88,20 +108,19 @@ export default async function RootLayout({
                       initialAIState={{
                         chatId: id,
                         messages: [],
-                        markers: [],
+                        markers: marker ? [marker] : [],
                         foo: ''
                       }}
                     >
-                      <MapBM mapChildren={mapChildren}>{uiMap}</MapBM>
+                      <MapBM>{mapChildren}</MapBM>
                       <Chat
                         id={id}
                         session={session}
                         missingKeys={missingKeys}
                       />
-                      {children}
+                      <div>{children}</div>
                     </AI>
                   </aside>
-                  <aside className="hidden min-w-32 col-span-4 bg-gray-100 px-8 py-6"></aside>
                 </main>
               </div>
               <TailwindIndicator />

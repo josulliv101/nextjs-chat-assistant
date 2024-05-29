@@ -37,6 +37,7 @@ export default function FoobarMarker({
   size = 24,
   title = 'foo',
   // onClick,
+  addMarkerToAiState = false,
   ...props
 }: any) {
   const map = useMap()
@@ -46,16 +47,16 @@ export default function FoobarMarker({
 
   const [markerRef, marker] = useAdvancedMarkerRef()
 
-  const isWithinBounds =
-    !!marker?.position && map?.getBounds()?.contains(marker?.position)
+  // const isWithinBounds =
+  //   !!marker?.position && map?.getBounds()?.contains(marker?.position)
 
   const onClick = () => {
     console.log('onClick', id)
-    router.push(`/map/${id}`)
+    router.push(`/profile/${id}`)
   }
 
   // useEffect(() => {
-  //   if (position && markers) {
+  //   if (addMarkerToAiState && position) {
   //     setAiState({
   //       ...aiState,
   //       markers: [position]
@@ -81,6 +82,10 @@ export default function FoobarMarker({
   //     }
   //   }
   // }, [mapState]);
+
+  if (!position) {
+    return null
+  }
 
   return (
     <AdvancedMarker

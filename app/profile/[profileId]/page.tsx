@@ -10,10 +10,9 @@ import FoobarMarker from '@/components/FoobarMarker'
 import { useMapContext } from '@/components/MapContext'
 import fetchPlaces from '@/lib/chat/fetchPlaces'
 
-export default async function Page({ params: { placeIds } }: any) {
-  const placeId = Array.isArray(placeIds) && placeIds.length ? placeIds[0] : ''
-  const places = await fetchPlaces([placeId])
-  const place = places[0]
+export default async function Page({ params: { profileId } }: any) {
+  const places = await fetchPlaces([profileId])
+  const place = places?.[0]
   const name = place?.fields?.displayName?.mapValue?.fields?.text.stringValue
 
   const description =
@@ -21,8 +20,9 @@ export default async function Page({ params: { placeIds } }: any) {
       ?.fields?.text.stringValue
   return (
     <>
-      <div className="mt-8 px-12">
-        <h2 className="text-2xl font-semibold">{name}</h2>
+      <div className="mt-8 px-12 bg-blue-50">
+        <h2>{name}</h2>
+        <p className=" h-[800px]">{description}</p>
       </div>
     </>
   )

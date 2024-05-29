@@ -1,6 +1,6 @@
 'use client'
 
-import { Map, Marker } from '@vis.gl/react-google-maps'
+import { Map, Marker, useMap } from '@vis.gl/react-google-maps'
 import MapPosition from './MapPosition'
 import FoobarMarker from './FoobarMarker'
 import { useMapContext } from './MapContext'
@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation'
 export default function FoobarMap({ children }: any) {
   const [initialMarkers, setInitialMarkers] = useMapContext()
   const router = useRouter()
+  const map = useMap()
   console.log('initialMarkers', initialMarkers)
 
   return (
@@ -17,7 +18,7 @@ export default function FoobarMap({ children }: any) {
       className="h-[320px] w-full"
       defaultZoom={3}
       defaultBounds={undefined}
-      defaultCenter={{ lat: 22.54992, lng: 0 }}
+      // defaultCenter={{ lat: 22.54992, lng: 0 }}
       clickableIcons={true}
       gestureHandling={'greedy'}
       disableDefaultUI={true}

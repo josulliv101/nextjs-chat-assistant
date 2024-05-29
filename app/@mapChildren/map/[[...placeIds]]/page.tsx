@@ -17,8 +17,8 @@ import { TooltipPortal } from '@radix-ui/react-tooltip'
 
 export default async function Page({ params: { placeIds } }: any) {
   const placeId = Array.isArray(placeIds) && placeIds.length ? placeIds[0] : ''
-  const places = await fetchPlaces([placeId])
-  const place = places[0]
+  const places = placeId ? await fetchPlaces([placeId]) : []
+  const place = places?.[0]
   const name = place?.fields?.displayName?.mapValue?.fields?.text.stringValue
   const lat = place?.fields?.location?.mapValue?.fields?.latitude?.doubleValue
   const lng = place?.fields?.location?.mapValue?.fields?.longitude?.doubleValue
@@ -29,7 +29,7 @@ export default async function Page({ params: { placeIds } }: any) {
   const marker: Marker = { lat, lng, name, id: placeId }
   const handleClick = () => console.log(name)
 
-  if (!placeId) {
+  if (!marker || !marker.lat || !marker.lng) {
     return null
   }
 
