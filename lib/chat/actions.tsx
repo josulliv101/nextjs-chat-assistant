@@ -131,11 +131,20 @@ async function submitUserMessage(content: string) {
   let textStream: undefined | ReturnType<typeof createStreamableValue<string>>
   let textNode: undefined | React.ReactNode
 
+  const geoUser = aiState.get().markers.find(m => m.id === 'user-geo')
+
+  const geoCustomMessage = geoUser
+    ? `The user is from this general area - it is not exact so do not make specific reference to it...but use it to help determine where to search: ${JSON.stringify(geoUser)}`
+    : ''
+
   const result = await streamUI({
     model: openai('gpt-3.5-turbo'),
     initial: <SpinnerMessage />,
     system: `\
-    You are a restaurant recommendation & conversation bot and you help users locate good places to eat that matches what they are looking for, step by step.`,
+    You are a restaurant recommendation & conversation bot and you help users locate good places to eat that matches what they are looking for, step by step.
+    
+    ${geoCustomMessage}
+    `,
     messages: [
       ...aiState.get().messages.map((message: any) => ({
         role: message.role,
