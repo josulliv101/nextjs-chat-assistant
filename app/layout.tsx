@@ -82,7 +82,8 @@ export default async function RootLayout({
           id: 'user-geo',
           lat: Number(geo.latitude),
           lng: Number(geo.longitude),
-          name: 'User geo'
+          name: 'User geo',
+          zoom: 4
         }
       }
     } catch (err) {}
