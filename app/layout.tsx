@@ -45,19 +45,16 @@ export const viewport = {
   ]
 }
 
-interface RootLayoutProps {
-  children: React.ReactNode
-  uiMap: React.ReactNode
-  mapChildren: React.ReactNode
-  params: any
-}
-
 export default async function RootLayout({
   children,
   mapChildren,
 
   params
-}: RootLayoutProps) {
+}: {
+  children: React.ReactNode
+  mapChildren: React.ReactNode
+  params: any
+}) {
   const id = nanoid()
   const session = (await auth()) as Session
   const missingKeys = await getMissingKeys()
