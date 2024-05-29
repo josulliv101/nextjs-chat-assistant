@@ -16,35 +16,47 @@ import fetchPlaces from '@/lib/chat/fetchPlaces'
 import { TooltipPortal } from '@radix-ui/react-tooltip'
 
 export default async function Page({ params: { placeIds } }: any) {
+  const foobarPlaces =
+    Array.isArray(placeIds) && placeIds.length ? placeIds : [placeIds]
   const placeId = Array.isArray(placeIds) && placeIds.length ? placeIds[0] : ''
-  const places = placeId ? await fetchPlaces([placeId]) : []
+  const places =
+    foobarPlaces && foobarPlaces.length ? await fetchPlaces(foobarPlaces) : []
   const place = places?.[0]
-  const name = place?.fields?.displayName?.mapValue?.fields?.text.stringValue
-  const lat = place?.fields?.location?.mapValue?.fields?.latitude?.doubleValue
-  const lng = place?.fields?.location?.mapValue?.fields?.longitude?.doubleValue
-  const description =
-    place?.fields?.generativeSummary?.mapValue?.fields?.description?.mapValue
-      ?.fields?.text.stringValue
 
-  const marker: Marker = { lat, lng, name, id: placeId }
-  const handleClick = () => console.log(name)
-
-  if (!marker || !marker.lat || !marker.lng) {
-    return null
-  }
+  const handleClick = () => console.log(places)
 
   return (
     <>
-      <FoobarMarker
-        id={placeId}
-        key={JSON.stringify(marker)}
-        position={marker}
-        clickable={true}
-        // onClick={handleClick}
-        title={marker?.name || 'unknown'}
-      >
-        <div className="relative z-[9999] rounded-full bg-blue-500 border-4 border-white size-8 animate-in"></div>
-      </FoobarMarker>
+      {places.map((place, index) => {
+        const name =
+          place?.fields?.displayName?.mapValue?.fields?.text.stringValue
+        const lat =
+          place?.fields?.location?.mapValue?.fields?.latitude?.doubleValue
+        const lng =
+          place?.fields?.location?.mapValue?.fields?.longitude?.doubleValue
+        const description =
+          place?.fields?.generativeSummary?.mapValue?.fields?.description
+            ?.mapValue?.fields?.text.stringValue
+
+        const marker: Marker = { lat, lng, name, id: foobarPlaces[index] }
+
+        if (!marker || !marker.lat || !marker.lng) {
+          return null
+        }
+
+        return (
+          <FoobarMarker
+            id={foobarPlaces[index]}
+            key={JSON.stringify(marker)}
+            position={marker}
+            clickable={true}
+            // onClick={handleClick}
+            title={marker?.name || 'unknown'}
+          >
+            <div className="relative z-[9999] rounded-full bg-blue-500 border-4 border-white size-8 animate-in"></div>
+          </FoobarMarker>
+        )
+      })}
     </>
   )
 }

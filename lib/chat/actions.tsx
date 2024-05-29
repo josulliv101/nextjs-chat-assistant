@@ -1,5 +1,5 @@
 import 'server-only'
-
+import Image from 'next/image'
 import {
   createAI,
   createStreamableUI,
@@ -37,7 +37,7 @@ import { saveChat } from '@/app/actions'
 import { SpinnerMessage, UserMessage } from '@/components/stocks/message'
 import { Chat, Marker, Message } from '@/lib/types'
 import { auth } from '@/auth'
-import { KnownFor } from '@/components/known-for'
+import { KnownFor, RedirectOnClient } from '@/components/known-for'
 import MapPosition from '@/components/MapPosition'
 import fetchPlaces from './fetchPlaces'
 
@@ -498,12 +498,9 @@ async function submitUserMessage(content: string) {
           // delta: z.number().describe('The change in price of the stock')
         }),
         generate: async function* ({ placeIds = [] }) {
-          yield (
-            <BotCard>
-              <StocksSkeleton />
-            </BotCard>
-          )
+          yield <SystemMessage>Analyzing...</SystemMessage>
 
+          await sleep(2000)
           const placesList = await fetchPlaces(placeIds)
           console.log('getRecommendations/placeIds', placeIds)
 
@@ -523,11 +520,15 @@ async function submitUserMessage(content: string) {
             return { id, lat, lng, name }
           })
 
+          yield <SystemMessage>Calling tool...</SystemMessage>
+
+          await sleep(2000)
+
           const toolCallId = nanoid()
 
           aiState.done({
             ...aiState.get(),
-            markers,
+            markers: [],
             messages: [
               ...aiState.get().messages,
               {
@@ -560,11 +561,22 @@ async function submitUserMessage(content: string) {
           return (
             <>
               <BotCard>
-                <div className="flex flex-col items-stretch gap-4">
-                  {placesList.map(place => (
-                    <KnownFor key={place.name} {...place} />
+                <div className="flex justify-between gap-4">
+                  {markers.map(marker => (
+                    <div className="col-span-1">
+                      <Image
+                        key={marker.id}
+                        width="200"
+                        height="200"
+                        className="w-1/3 h-auto object-cover"
+                        alt={marker.name}
+                        src={`/${marker.id}-logo.jpg`}
+                      />
+                    </div>
                   ))}
                 </div>
+                <BotMessage content={'Check out these results.'} />
+                <RedirectOnClient pathname={`/map/${placeIds.join('/')}`} />
               </BotCard>
             </>
           )
