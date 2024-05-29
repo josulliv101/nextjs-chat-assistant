@@ -18,7 +18,7 @@ export default function FoobarMap({ children }: any) {
       className="h-[320px] w-full"
       defaultZoom={3}
       defaultBounds={undefined}
-      // defaultCenter={{ lat: 22.54992, lng: 0 }}
+      defaultCenter={{ lat: 42.3530905890469, lng: -71.09300127556693 }}
       clickableIcons={true}
       gestureHandling={'greedy'}
       disableDefaultUI={true}

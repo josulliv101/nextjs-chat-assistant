@@ -48,7 +48,6 @@ export const viewport = {
 export default async function RootLayout({
   children,
   mapChildren,
-
   params
 }: {
   children: React.ReactNode
@@ -73,7 +72,8 @@ export default async function RootLayout({
     place?.fields?.generativeSummary?.mapValue?.fields?.description?.mapValue
       ?.fields?.text.stringValue
 
-  const marker: any = placeId ? { lat, lng, name, id: placeId } : null
+  const marker: any =
+    placeId && lat && lng && name ? { lat, lng, name, id: placeId } : null
 
   return (
     <html lang="en" suppressHydrationWarning>

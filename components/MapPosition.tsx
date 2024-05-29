@@ -22,7 +22,10 @@ export default function MapPosition({
 
   const [aiState] = useAIState()
 
-  const { markers = [] } = aiState
+  const { markers: rawMarkers = [] } = aiState
+  const markers = rawMarkers.filter(
+    (m: any) => m.id && m.lat && m.lng && m.name
+  )
   // const [initialMarkers, setInitialMarkers] = useMapContext()
   const coreLib = useMapsLibrary('core')
 
@@ -61,7 +64,8 @@ export default function MapPosition({
       const z = getHubMapZoom(markers[0].mapZoom, distance)
       return map.setZoom(z)
     } else if (markers.length === 1) {
-      const zProfile = markers[0].zoom
+      console.log('MARKERS', markers)
+      const zProfile = markers[0]?.zoom
       map.setZoom(zProfile || 14)
 
       map.setCenter(markers[0])

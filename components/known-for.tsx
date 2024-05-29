@@ -91,13 +91,13 @@ export function KnownFor({
   )
 }
 
-export function UnknownManager({ children }: any) {
-  const [markers, setMarkers] = useMapContext()
-  // const router = useRouter()
-  console.log('UnknownManager', markers)
-  useEffect(() => {
-    setMarkers(markers)
-  }, [markers])
+// export function UnknownManager({ children }: any) {
+//   const [markers, setMarkers] = useMapContext()
+//   // const router = useRouter()
+//   console.log('UnknownManager', markers)
+//   useEffect(() => {
+//     setMarkers(markers)
+//   }, [markers])
 
-  return <>{children}</>
-}
+//   return <>{children}</>
+// }

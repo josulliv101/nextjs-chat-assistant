@@ -37,7 +37,7 @@ import { saveChat } from '@/app/actions'
 import { SpinnerMessage, UserMessage } from '@/components/stocks/message'
 import { Chat, Marker, Message } from '@/lib/types'
 import { auth } from '@/auth'
-import { KnownFor, UnknownManager } from '@/components/known-for'
+import { KnownFor } from '@/components/known-for'
 import MapPosition from '@/components/MapPosition'
 import fetchPlaces from './fetchPlaces'
 
