@@ -111,8 +111,8 @@ export default async function RootLayout({
             libraries={['marker']}
           >
             <MapContextProvider>
-              <div className="flex flex-col min-h-screen">
-                <Header />
+              <div className="flex flex-col ">
+                {/* <Header /> */}
                 <AI
                   initialAIState={{
                     chatId: id,
@@ -121,24 +121,25 @@ export default async function RootLayout({
                     foo: ''
                   }}
                 >
-                  <main className="grid grid-cols-12 gap-0 flex-1 bg-muted/50">
-                    <aside className="w-full col-span-8 ">
-                      <div className="grid grid-cols-12 gap-0">
+                  <main className=" grid grid-cols-12 gap-0 bg-muted/50">
+                    <aside className="bg-red-50 w-full col-span-8 ">
+                      <div className="grid grid-cols-12 gap-0 min-h-96">
                         <div className="col-span-4 w-full border-r border-r-gray-300">
                           {mapAside}
                         </div>
                         <div className="col-span-8">
-                          <MapBM>{mapChildren}</MapBM>
+                          {/* <MapBM>{mapChildren}</MapBM> */}
                         </div>
                       </div>
-
+                      <div>{children}</div>
+                    </aside>
+                    <div className="col-span-4 w-full bg-green-50 h-[500px]">
                       <Chat
                         id={id}
                         session={session}
                         missingKeys={missingKeys}
                       />
-                      <div>{children}</div>
-                    </aside>
+                    </div>
                   </main>
                 </AI>
               </div>

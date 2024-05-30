@@ -28,7 +28,7 @@ export default async function Page({ params: { placeIds } }: any) {
             ?.mapValue?.fields?.text.stringValue
 
         return (
-          <div className="grid grid-cols-12 gap-0">
+          <div key={name} className="grid grid-cols-12 gap-0">
             <div className="col-span-12 px-4 py-3 lg:px-8 lg:py-6">
               <div>
                 <h2 className="font-semibold text-xl mb-2">{name}</h2>
