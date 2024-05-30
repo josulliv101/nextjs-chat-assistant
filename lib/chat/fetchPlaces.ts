@@ -1,4 +1,4 @@
-export default async function fetchPlaces(placeIds: Array<string>) {
+export default async function fetchPlaces(placeIds: Array<string> = []) {
   const endpoint =
     'https://firestore.googleapis.com/v1/projects/ai-genkit-rag/databases/(default)/documents/buildPlaces/'
 

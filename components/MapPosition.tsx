@@ -72,7 +72,7 @@ export default function MapPosition({
       const zProfile = markers[0]?.zoom
       map.setZoom(zProfile || 14)
 
-      map.setCenter(markers[0])
+      map.panTo(markers[0]) // map.setCenter(markers[0])
     } else {
       map.fitBounds(bounds)
     }

@@ -47,11 +47,13 @@ export const viewport = {
 
 export default async function RootLayout({
   children,
+  mapAside,
   mapChildren,
   params
 }: {
   children: React.ReactNode
   mapChildren: React.ReactNode
+  mapAside: React.ReactNode
   params: any
 }) {
   const id = nanoid()
@@ -111,27 +113,34 @@ export default async function RootLayout({
             <MapContextProvider>
               <div className="flex flex-col min-h-screen">
                 <Header />
+                <AI
+                  initialAIState={{
+                    chatId: id,
+                    messages: [],
+                    markers: marker ? [marker] : [],
+                    foo: ''
+                  }}
+                >
+                  <main className="grid grid-cols-12 gap-0 flex-1 bg-muted/50">
+                    <aside className="w-full col-span-8 ">
+                      <div className="grid grid-cols-12 gap-0">
+                        <div className="col-span-4 w-full border-r border-r-gray-300">
+                          {mapAside}
+                        </div>
+                        <div className="col-span-8">
+                          <MapBM>{mapChildren}</MapBM>
+                        </div>
+                      </div>
 
-                <main className="grid grid-cols-12 gap-0 flex-1 bg-muted/50">
-                  <aside className="w-full col-span-8 ">
-                    <AI
-                      initialAIState={{
-                        chatId: id,
-                        messages: [],
-                        markers: marker ? [marker] : [],
-                        foo: ''
-                      }}
-                    >
-                      <MapBM>{mapChildren}</MapBM>
                       <Chat
                         id={id}
                         session={session}
                         missingKeys={missingKeys}
                       />
                       <div>{children}</div>
-                    </AI>
-                  </aside>
-                </main>
+                    </aside>
+                  </main>
+                </AI>
               </div>
               <TailwindIndicator />
             </MapContextProvider>

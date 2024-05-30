@@ -98,15 +98,15 @@ export function BotCard({
     <div className="group relative flex items-start md:-ml-12">
       <div
         className={cn(
-          'flex size-[48px] shrink-0 select-none items-center justify-center rounded-full border-spacing-6 border-blue-500 bg-primary text-primary-foreground shadow-sm',
+          'flex size-[24px] shrink-0 select-none items-center justify-center rounded-full border-spacing-6 border-blue-500 bg-primary text-primary-foreground shadow-sm',
           !showAvatar && 'invisible'
         )}
       >
         <Image
           alt="Natalia"
           src="/natalia-square.png"
-          width="48"
-          height="48"
+          width="24"
+          height="24"
           className="rounded-full object-cover"
         />
       </div>

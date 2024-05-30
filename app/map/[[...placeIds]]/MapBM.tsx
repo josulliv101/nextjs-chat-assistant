@@ -27,7 +27,7 @@ export default function MapBM({ children }: PropsWithChildren<{}>) {
   return (
     <MapPosition distance={10}>
       <Map
-        className="h-[320px] w-full col-span-8"
+        className="h-[30vh] min-h-full w-full col-span-8"
         defaultZoom={3}
         defaultBounds={undefined}
         defaultCenter={{ lat: 22.54992, lng: 0 }}

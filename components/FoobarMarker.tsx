@@ -55,14 +55,14 @@ export default function FoobarMarker({
     router.push(`/profile/${id}`)
   }
 
-  // useEffect(() => {
-  //   if (addMarkerToAiState && position) {
-  //     setAiState({
-  //       ...aiState,
-  //       markers: [position]
-  //     })
-  //   }
-  // }, [])
+  useEffect(() => {
+    if (addMarkerToAiState && position) {
+      setAiState({
+        ...aiState,
+        markers: [position]
+      })
+    }
+  }, [])
 
   // useEffect(() => {
   //   if (!coreLib || !map || !marker) return;

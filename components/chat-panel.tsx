@@ -41,9 +41,9 @@ export function ChatPanel({
       message: `What are the trending memecoins today?`
     },
     {
-      heading: 'What is the price of',
-      subheading: '$DOGE right now?',
-      message: 'What is the price of $DOGE right now?'
+      heading: 'Directory',
+      subheading: 'view what is here',
+      message: 'Show me a directory'
     },
     {
       heading: 'recoomend bancroft',

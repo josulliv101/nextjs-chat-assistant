@@ -46,6 +46,7 @@ export default async function Page({ params: { placeIds } }: any) {
 
         return (
           <FoobarMarker
+            addMarkerToAiState
             id={foobarPlaces[index]}
             key={JSON.stringify(marker)}
             position={marker}

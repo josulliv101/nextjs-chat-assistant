@@ -28,20 +28,12 @@ export default async function Page({ params: { placeIds } }: any) {
             ?.mapValue?.fields?.text.stringValue
 
         return (
-          <div
-            key={name}
-            className="mt-8 px-12 rounded-md flex gap-8 items-start"
-          >
-            <Image
-              className="aspect-square min-w-48 rounded-md"
-              alt={name}
-              width="200"
-              height="200"
-              src={`/${foobarPlaces[index]}-logo.jpg`}
-            />
-            <div>
-              <h2 className="font-semibold text-xl mb-2">{name}</h2>
-              <p className=" min-h-[100px]">{description}</p>
+          <div className="grid grid-cols-12 gap-0">
+            <div className="col-span-12 px-4 py-3 lg:px-8 lg:py-6">
+              <div>
+                <h2 className="font-semibold text-xl mb-2">{name}</h2>
+                <p className=" min-h-[100px] text-lg">{description}</p>
+              </div>
             </div>
           </div>
         )
